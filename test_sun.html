@@ -33,6 +33,7 @@ div.tooltip {
     var height = 500;
     var radius = Math.min(width, height) / 2;
     var color = d3.scaleOrdinal(d3.schemeCategory20b);
+	
     // Define the div for the tooltip
     var div = d3.select("body").append("div")	
         .attr("class", "tooltip")				
@@ -201,7 +202,6 @@ div.tooltip {
             continent.children[3]["value"] = factors[3][c];
             continent.children[4]["value"] = factors[4][c];
         });
-		console.log(factors);
         parseValuesNodes();
     };
     parseCSV(data);
@@ -267,11 +267,11 @@ div.tooltip {
                 div.transition()		
                     .duration(500)		
                     .style("opacity", 0);	
-            });
+            })
         
         // Populate the <text> elements with our data-driven titles.
-        //g.selectAll(".node")
-            //.append("text")
+        g.selectAll(".node")
+            .append("text")
             //.attr("transform", function(d, i) {
                 //console.log(d);
                 //console.log(d.x0);
@@ -280,12 +280,24 @@ div.tooltip {
                 //console.log(d.y1);
                 //console.log([d.x0 + (d.x1 - d.x0)/2, d.y0 + (d.y1 - d.y0)/2]);
                 //return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
-            //.attr("dx", "-20") // radius margin
-            //.attr("dy", ".5em") // rotation align
-            //.text(function(d) { return d.parent ? d.data.name : "" })
-        //;
+            .attr("dx", function(d) {
+					if (d.data.name === "AFR") {return 105;}
+					else if (d.data.name === "WPR") {return -165;}
+					else if (d.data.name === "EUR") {return 40;}	
+					else if (d.data.name === "SEAR") {return -105;}
+					else if (d.data.name === "EMR") {return 5;}
+					else if (d.data.name === "AMR") {return -85;}
+				}) // radius margin
+            .attr("dy", function(d) {
+					if (d.data.name === "EUR") {return 110;}
+					else if (d.data.name === "SEAR") {return -100;}
+					else if (d.data.name === "EMR") {return -100;}
+					else if (d.data.name === "AMR") {return 110;}
+				}) // rotation align
+            .text(function(d) { if (correspondingContinent[d.data.name]) {return correspondingContinent[d.data.name];} })
+        ;
     };
-    
+	
 	//Functions for sunburst.
 	//
 	//This function takes the object "d" of hierarcal datas in sunburst for arguments. It allow to format all datas shox in the sunburst when the user
