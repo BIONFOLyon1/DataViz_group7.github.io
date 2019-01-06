@@ -33,6 +33,9 @@ div.tooltip {
     var height = 500;
     var radius = Math.min(width, height) / 2;
     var color = d3.scaleOrdinal(d3.schemeCategory20b);
+	//Control bar chart and matrix displayed on the screen.
+	var matrix = {"EMR": false, "AFR": false, "EUR": false, "AMR": false, "WPR" : false, "SEAR" : false};
+	var chart = {"Total_deaths": false, "Uv_deaths": false,"Chemical_pollution": false, "Water_pollution": false, "Air_pollution": false};
 	
     // Define the div for the tooltip
     var div = d3.select("body").append("div")	
@@ -223,6 +226,18 @@ div.tooltip {
 
 //<------------------------------------------ SUNBURST ---------------------------------->
 	
+	//Make circles around sunburst each 25% percents (from 0% to 100%).
+	var grad = [1 , 0.91875, 0.8375, 0.75375, 0,67]
+	for (var i = 0; i < 5; i++) {
+		var circleOne = g.append("circle")
+    		.attr("cx", 0)
+    		.attr("cy", 0)
+    		.attr("r", radius * grad[i])
+    		.attr("stroke", "grey")
+			.attr("fill", "white")
+			.attr("stroke-dasharray", 5, 10)	
+			.attr("opacity", 0.7);
+	}
 	
     //This function takes "nodes" and "valuesNodes" variables in arguments. It allow to display the sunburst with our data on the screen of the web 
     //navigator.  
@@ -269,8 +284,40 @@ div.tooltip {
 				d3.select(this).style("opacity", 0.7)
                 div.transition()		
                     .duration(500)		
-                    .style("opacity", 0);	
-            })
+                    .style("opacity", 0)
+				})
+			//Display ,or not, matrix or bar chart when an element in the chart is clicked. If the element an element is click for the first time,
+			//matrix or bar chart is displayed (matrix if the elemnt is a continent, bar chart if the element is a factor). If the element is 
+			//click for a second time, the corresponding bar chart or matrix is displayed off.
+			.on("click", function(d){
+        			if (correspondingContinent[d.data.name]) {
+						if (matrix[d.data.name] === false) {
+							matrix[d.data.name] = true
+						} else if (matrix[d.data.name] === true) {
+							matrix[d.data.name] = false
+						}
+						
+						if (matrix[d.data.name] === true) {
+							showMatrix(d.data.name)
+						} else if (matrix[d.data.name] === false) {
+							div.select("d.data.name").remove();
+						}
+					}	
+					else if (correspondingFactors[d.data.name]) {
+						if (chart[d.data.name] === false) {
+							chart[d.data.name] = true;
+						} else if (chart[d.data.name] === true) {
+							chart[d.data.name] = false
+						}
+						
+						if (chart[d.data.name] === true) {
+							showBarChart(d.parent.data.name, d.data.name)
+						} else if (chart[d.data.name] === false) {
+							div.select("d.div.name").remove();
+						}
+					}
+    			})	
+            
         
         // Populate the <text> elements with our data-driven titles.
         g.selectAll(".node")
@@ -336,5 +383,113 @@ div.tooltip {
         return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
         //return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
     }
+
+//<------------------------------------------ BAR-CHART ---------------------------------->	
+	
+	function showBarChart(continentSelected, factorSelected) {
+		
+		var fact = {"Total_deaths" : "PourcentDeathAttribuableEnv", "Uv_deaths" : "Per100000UV", "Chemical_pollution" : "Per100000Chemi", "Water_pollution" : "Per100000Water", "Air_pollution" : "Per100000AirPol"};
+		var factorSel = fact[factorSelected];
+		
+		var maxFactors = {"Total_deaths" : 0, "Uv_deaths" : 0, "Chemical_pollution" : 0, "Water_pollution" : 0, "Air_pollution" : 0};
+
+		var countries = []
+		var valuesCountries = []
+		
+		d3.csv(data, function(data) {
+			data.forEach(function(d) {
+                //Transform each value in number type.
+                for (var i = 0; i < factors.length; i++){
+                    var key = factors[i];
+                    d[key] = +d[key];
+                };
+				
+				//Search all max values for each factors regarding each country.
+            	if (d["PourcentDeathAttribuableEnv"] >= maxFactors["Total_deaths"]){
+                	maxFactors["Total_deaths"] = d["PourcentDeathAttribuableEnv"];
+            	}
+            	if (d["Per100000UV"] >= maxFactors["Uv_deaths"]){
+                	maxFactors["Uv_deaths"] = d["Per100000UV"];
+            	}
+            	if (d["Per100000Chemi"] >= maxFactors["Chemical_pollution"]){
+                	maxFactors["Chemical_pollution"] = d["Per100000Chemi"];
+            	}
+            	if (d["Per100000Water"] >= maxFactors["Water_pollution"]){
+                	maxFactors["Water_pollution"] = d["Per100000Water"];
+            	}
+            	if (d["Per100000AirPol"] >= maxFactors["Air_pollution"]){
+                	maxFactors["Air_pollution"] = d["Per100000AirPol"];
+        		}
+			})
+			
+			//Takes each names and values for each country selected.
+			data.forEach(function(d){
+				if (d.region_code === continentSelected) {
+					countries.push(d.country_name);
+					valuesCountries.push(d[factorSel]);
+				}
+			})
+			var maxF = maxFactors[factorSelected];
+			//Calculate the ratio for each values.
+			for (var i = 0; i < valuesCountries.length; i++) {
+				valuesCountries[i] = valuesCountries[i] / maxF;
+			}
+		})
+		
+		//Make the rest of the code here to draw a bar chart.
+	}
+	
+//<------------------------------------------ BAR-CHART ---------------------------------->	
+	
+function showMatrix(continentSelected) {
+	
+	var datasSelected = {"Total_deaths" : {}, "Uv_deaths" : {}, "Chemical_pollution" : {}, "Water_pollution" : {}, "Air_pollution" : {} };
+	var maxFactors = {"Total_deaths" : 0, "Uv_deaths" : 0, "Chemical_pollution" : 0, "Water_pollution" : 0, "Air_pollution" : 0};
+		
+	d3.csv(data, function(data) {
+		data.forEach(function(d) {
+			//Transform each value in number type.
+			for (var i = 0; i < factors.length; i++){
+            	var key = factors[i];
+                d[key] = +d[key];
+            };
+		})
+		
+		//Search all max values for each factors regarding each country.
+		data.forEach(function(d) {
+			if (continentSelected === d.region_code) {
+				//Search all max values for each factors regarding each country.
+            	if (d["PourcentDeathAttribuableEnv"] >= maxFactors["Total_deaths"]){
+                	maxFactors["Total_deaths"] = d["PourcentDeathAttribuableEnv"];
+            	}
+            	if (d["Per100000UV"] >= maxFactors["Uv_deaths"]){
+                	maxFactors["Uv_deaths"] = d["Per100000UV"];
+            	}
+            	if (d["Per100000Chemi"] >= maxFactors["Chemical_pollution"]){
+                	maxFactors["Chemical_pollution"] = d["Per100000Chemi"];
+            	}
+            	if (d["Per100000Water"] >= maxFactors["Water_pollution"]){
+                	maxFactors["Water_pollution"] = d["Per100000Water"];
+            	}
+            	if (d["Per100000AirPol"] >= maxFactors["Air_pollution"]){
+                	maxFactors["Air_pollution"] = d["Per100000AirPol"];
+        		}
+			}
+		})
+		
+		//Put each country and each ratio value in the right dictionnary factor.
+		data.forEach(function(d) {
+			if (continentSelected === d.region_code) {
+				datasSelected.Total_deaths[d.country_name] = d.PourcentDeathAttribuableEnv / maxFactors["Total_deaths"];
+				datasSelected.Uv_deaths[d.country_name] = d.Per100000UV / maxFactors["Uv_deaths"];
+				datasSelected.Chemical_pollution[d.country_name] = d.Per100000Chemi / maxFactors["Chemical_pollution"];
+				datasSelected.Water_pollution[d.country_name] = d.Per100000Water / maxFactors["Water_pollution"];
+				datasSelected.Air_pollution[d.country_name] = d.Per100000AirPol / maxFactors["Air_pollution"];
+			}
+		})
+	})
+		
+	//Make the rest of the code here to draw a matrix.
+}
 	
 </script>
