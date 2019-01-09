@@ -395,7 +395,7 @@
       			var val = 0;
       			var info = "";
 
-      			if (d.data.name === "Total_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * totalDeathsMax); info = "number of deaths attribuable to the environment (per 100 000 population)";}
+      			if (d.data.name === "Total_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * totalDeathsMax); info = "percentage of death attribuable to the environment (%)";}
       			else if (d.data.name === "Uv_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * uvMax); info = "UV radiation attributable deaths (per 100 000 population)";}
       			else if (d.data.name === "Chemical_pollution") { val = (totalDeaths[d.parent.data.name] * chemicalMax).toFixed(3); info = " number of deaths from unintentional poisoning (per 100 000 population)."}
       			else if (d.data.name === "Water_pollution") { val = (totalDeaths[d.parent.data.name] * waterMax).toFixed(3); info = " number of deaths attributed to exposure to unsafe water, sanitation and hygiene (per 100 000 population)";}
