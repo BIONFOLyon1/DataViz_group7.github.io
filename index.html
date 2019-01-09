@@ -1,33 +1,639 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
   <head>
+
     <meta charset="utf-8">
-    <title>Sequences sunburst</title>
-    <script src="//d3js.org/d3.v4.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
-    <link rel="stylesheet" type="text/css" href="sunburst.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SANTA</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/grayscale.min.css" rel="stylesheet">
+
+    <!-- Import d3JS -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <!-- Style above the rest -->
+    <link href="css/style.css" rel="stylesheet">
   </head>
-  <body>
-    <div id="main">
-      <!--Div of the sunburst.-->
-      <div id="sunburst"></div>
-      <div id="chart">
-        <!--When user mouseover an item, the name of the item is displayed in sunburst center.-->
-        <div id="explanation" style="visibility: hidden;">
-          <span id="info"></span><br/>
-          Selection : 
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container menu-haut">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">SANTA</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#projects">Project</a>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
-    <!--Legend hidden when checkbox is not cheked.-->
-    <div id="sidebar">
-      <input type="checkbox" id="togglelegend"> Legend<br/>
-      <div id="legend" style="visibility: hidden;"></div>
-    </div>
-    <script type="text/javascript" src="sunburst.js"></script>
-    <script type="text/javascript">
-      // Hack to make this example display correctly in an iframe on bl.ocks.org
-      d3.select(self.frameElement).style("height", "700px");
-  </script> 
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container d-flex h-100 align-items-center">
+          <svg class="align-items-center"></svg>
+          <script>
+
+          //Variables for the sunburst.
+          var width = 500;
+          var height = 500;
+          var radius = Math.min(width, height) / 2;
+          var color = d3.scaleOrdinal(d3.schemeCategory20b);
+      	//Control bar chart and matrix displayed on the screen.
+      	var matrix = {"EMR": false, "AFR": false, "EUR": false, "AMR": false, "WPR" : false, "SEAR" : false};
+      	var chart = {"Total_deaths": false, "Uv_deaths": false,"Chemical_pollution": false, "Water_pollution": false, "Air_pollution": false};
+
+          // Define the div for the tooltip
+          var div = d3.select("body").append("div")
+              .attr("class", "tooltip")
+              .style("opacity", 0);
+          var colorSelected = {"origin": "#FFFFFF", "EMR": "#8c7a6b", "AFR": "#8c7a6b", "EUR": "#8c7a6b", "AMR": "#8c7a6b", "WPR": "#8c7a6b", "SEAR": "#8c7a6b", "Total_deaths": "#d65108", "Uv_deaths": "#648381", "Chemical_pollution": "#9bc4cb", "Water_pollution": "#202030", "Air_pollution": "#ff6700"}
+
+          //Create primary <g> element in <SVG> with the correctwidth and height.
+          var g = d3.select('svg')
+              .attr('width', width)
+              .attr('height', height)
+              .append('g')
+              .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');  //Goes from (x=0, y=0) at (x=250, y=250) the center of the sunburst.
+
+          //Partition of the sunburst.
+          var partition = d3.partition()
+              .size([2 * Math.PI, radius]);
+
+          //Environment varibles.
+          //CSV file who contains all datas.
+          var data = "data.csv";
+
+          //This variables must contains all datas for each factor.
+          var totalDeaths = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
+          var uv = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
+          var chemical = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
+          var water = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
+          var air = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
+
+          //Variables for keys accession.
+      	factors = ["PourcentDeathAttribuableEnv", "Per100000UV", "Per100000Chemi", "Per100000Water", "Per100000AirPol"];
+        var continentsCode = ["EMR", "AFR", "EUR", "AMR", "WPR", "SEAR"];
+      	var correspondingFactors = {"Total_deaths" : "Total deaths", "Uv_deaths" : "UV deaths", "Chemical_pollution" : "Chemical pollution", "Water_pollution" : "Water pollution", "Air_pollution" : "Air pollution"};
+        var correspondingContinent = {"EMR" : "Eastern Mediterranean", "AFR" : "Africa", "EUR" : "Europe", "AMR" : "Americas", "WPR" : "Western Pacific", "SEAR" : "South-East Asia"};
+
+
+          //Varibale to get in shape datas extracted for sunburst only (hierarchy model needed for sunburst).
+          var nodes = {"name": "origin", "value": 1, "children": [
+              {
+                  "name": "EMR",
+                  "size": 1/continentsCode.length,
+                  "value": 1,
+                  "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+              },
+              {
+                  "name": "AFR",
+                  "size": 1/continentsCode.length,
+                  "value": 1,
+                  "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+              },
+              {
+                  "name": "EUR",
+                  "size": 1/continentsCode.length,
+                  "value": 1,
+                  "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+              },
+              {
+                  "name": "AMR",
+                  "size": 1/continentsCode.length,
+                  "value": 1,
+                  "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+              },
+              {
+                  "name": "WPR",
+                  "size": 1/continentsCode.length,
+                  "value": 1,
+                  "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+              },
+              {
+                  "name": "SEAR",
+                  "size": 1/continentsCode.length,
+                  "value": 1,
+                  "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+              }
+          ]};
+
+          //This variable contains all datas and respect hierarchy.
+          var valuesNodes = [];
+
+      //<------------------------------------------ PRE-PROCESSING ---------------------------------->
+
+          //This function takes only "data", as string, in arguments. It allow to extract values in CSV file and tranform them in number. Then all datas are get-up
+          //in the corresponding variable factor. Finally call "ratioFactor" function.
+          function parseCSV (data) {
+      		var countries = 0;
+              d3.csv(data, function(data) {
+                  data.forEach(function(d) {
+      				countries += 1;
+                      //Transform each value in number type.
+                      for (var i = 0; i < factors.length; i++){
+                          var key = factors[i];
+                          d[key] = +d[key];
+                      };
+
+                      //Put each value in the correponding variable factor and the corresponding continent.
+                      var continentCode = d["region_code"];
+                      totalDeaths[continentCode] = totalDeaths[continentCode] + d["PourcentDeathAttribuableEnv"];
+                      uv[continentCode] = uv[continentCode] + d["Per100000UV"];
+                      chemical[continentCode] = chemical[continentCode] + d["Per100000Chemi"];
+                      water[continentCode] = water[continentCode] + d["Per100000Water"];
+                      air[continentCode] = air[continentCode] + d["Per100000AirPol"];
+                  });
+      			//Then calculate the ratio of value/number of countries for values originally in percentages.
+      			for (var i = 0; i < continentsCode.length; i++){
+                  	var key = continentsCode[i];
+                      chemical[key] = chemical[key] / countries;
+                      water[key] = water[key] / countries;
+                      air[key] = air[key] / countries;
+      			}
+                  ratioFactors();
+              });
+              return (totalDeaths, uv, chemical, water, air);
+          };
+
+          //This function take all variables factor in argument. It make the ratio for each factor. For factor, the continent with the bigger value have the
+          //maximal ratio (1), for the other, the ratio decrease in function of the ratio value(n)/value(n max). Finally it's call hierarchyNodes function.
+          function ratioFactors() {
+      		//Global variables needed to call after them in infoBubble function.
+              totalDeathsMax = 0;
+              uvMax = 0;
+              chemicalMax = 0;
+              waterMax = 0;
+              airMax = 0;
+
+              //Takes the maximum value for each factor.
+              for (var i = 0; i < continentsCode.length; i++){
+                  var key = continentsCode[i];
+                  if (totalDeaths[key] >= totalDeathsMax){
+                      totalDeathsMax = totalDeaths[key];
+                  }
+                  if (uv[key] >= uvMax){
+                      uvMax = uv[key];
+                  }
+                  if (chemical[key] >= chemicalMax){
+                      chemicalMax = chemical[key];
+                  }
+                  if (water[key] >= waterMax){
+                      waterMax = water[key];
+                  }
+                  if (air[key] >= airMax){
+                      airMax = air[key];
+                  }
+              };
+
+              //Then calculate the ratio.
+              for (var i = 0; i < continentsCode.length; i++){
+                  var key = continentsCode[i];
+                  totalDeaths[key] = totalDeaths[key] / totalDeathsMax;
+                  uv[key] = uv[key] / uvMax;
+                  chemical[key] = chemical[key] /chemicalMax;
+                  water[key] = water[key] / waterMax;
+                  air[key] = air[key] / airMax;
+              };
+              hierarachyNodes();
+          };
+
+          //This function takes all variables factor in argument. It's adapt each value for hierarchy needed for sunburst. It put each value in the "nodes"
+          //variable. Then it calls parseValuesNodes function.
+          function hierarachyNodes() {
+              //Allvariables factors are contains in "factors" variable.
+              var factors = [totalDeaths, uv, chemical, water, air];
+              //Each value of each variable factor are put in "nodes.children" in a correct way.
+              nodes.children.forEach(function(continent){
+                  var c = continent.name;
+                  continent.children[0]["value"] = factors[0][c];
+                  continent.children[1]["value"] = factors[1][c];
+                  continent.children[2]["value"] = factors[2][c];
+                  continent.children[3]["value"] = factors[3][c];
+                  continent.children[4]["value"] = factors[4][c];
+              });
+              parseValuesNodes();
+          };
+          parseCSV(data);
+
+          //This function takes "nodes" variable (at hierarchy for sunburst). For each value it takes the value calculate in ratioFactors function, beacause when
+          //we try to take this values in "nodes" it's retrun "0" or "1". Each are put in a array name valuesNodes. Then it callsdrawSunburst function.
+          function parseValuesNodes () {
+              valuesNodes.push(nodes.value);
+              for (var i = 0; i < continentsCode.length; i++){
+                   valuesNodes.push(nodes.children[i]["value"]);
+              };
+              for (var i = 0; i < continentsCode.length; i++){
+                  for (var j = 0; j < factors.length; j++){
+                      valuesNodes.push(nodes.children[i].children[j]["value"]);
+                  };
+              };
+              drawSunburst()
+          };
+
+      //<------------------------------------------ SUNBURST ---------------------------------->
+
+      	//Make circles around sunburst each 25% percents (from 0% to 100%).
+      	var grad = [1 , 0.91875, 0.8375, 0.75375, 0,67]
+      	for (var i = 0; i < 5; i++) {
+      		var circleOne = g.append("circle")
+          		.attr("cx", 0)
+          		.attr("cy", 0)
+          		.attr("r", radius * grad[i])
+          		.attr("stroke", "grey")
+      			.attr("fill", "white")
+      			.attr("stroke-dasharray", 5, 10)
+      			.attr("opacity", 0.7);
+      	}
+
+          //This function takes "nodes" and "valuesNodes" variables in arguments. It allow to display the sunburst with our data on the screen of the web
+          //navigator.
+          function drawSunburst() {
+              // Find data root and tranform values contains in "nodes" variabe in a hierarchical object adapted for the sunburst.
+              var root = d3.hierarchy(nodes)
+                  .sum(function (d) { return d.size});
+
+              // Calculate the size of each arcs in the sunburst. Each element have an arc. We have three arcs levels. This first one is in the center, it's the
+              //"origin" element. The second level conatains six continents with the same size. The third level conatiains each factor for each continent, the
+              //size of this arcs must be variable in function of the ratio value calculated before.
+              partition(root);
+              var i = 0;
+              var arc = d3.arc()
+                  .startAngle(function (d) { return d.x0 })
+                  .endAngle(function (d) { return d.x1 })
+                  .innerRadius(function (d) { return d.y0 })
+                  //Y1 is the variable who need to be variable, so we calculate the size of each arc without encroach on level 1 and 2 arcs ("origin" and
+                  //"continents").
+                  .outerRadius(function (d) { let score = ((d.y1 - d.y0) * valuesNodes[i]) + d.y0; i+= 1; return score });
+
+              // Put it all together, add a path through each element and draw them with a specific color.
+              g.selectAll('g')
+                  .data(root.descendants())
+                  .enter().append('g').attr("class", "node").append('path')
+                  .attr("display", function (d) { return d.depth ? null : "none"; })
+                  .attr("d", arc)
+                  //The color between arcs must be white.
+                  .style('stroke', '#fff')
+                  //The color of each arcs is specific of each type of value (contients are in a specific color and each factor in others specifics colors).
+                  .style("fill", function (d) { key = d.data.name; col = colorSelected[key]; return col; })
+      			.style("opacity", 0.7)
+      			//Show ingo bubble when mouseover.
+                  .on("mouseover", function(d) {
+      				d3.select(this).style("opacity", 1)
+                      div.transition()
+                          .duration(200)
+                          .style("opacity", .9);
+                      div.html(infoBubble(d))
+                          .style("left", (d3.event.pageX) + "px")
+                          .style("top", (d3.event.pageY - 28) + "px")
+                      })
+                  .on("mouseout", function(d) {
+      				d3.select(this).style("opacity", 0.7)
+                      div.transition()
+                          .duration(500)
+                          .style("opacity", 0)
+      				})
+      			//Display ,or not, matrix or bar chart when an element in the chart is clicked. If the element an element is click for the first time,
+      			//matrix or bar chart is displayed (matrix if the elemnt is a continent, bar chart if the element is a factor). If the element is
+      			//click for a second time, the corresponding bar chart or matrix is displayed off.
+      			.on("click", function(d){
+              			if (correspondingContinent[d.data.name]) {
+      						if (matrix[d.data.name] === false) {
+      							matrix[d.data.name] = true
+      						} else if (matrix[d.data.name] === true) {
+      							matrix[d.data.name] = false
+      						}
+
+      						if (matrix[d.data.name] === true) {
+      							showMatrix(d.data.name)
+      						} else if (matrix[d.data.name] === false) {
+      							div.select("d.data.name").remove();
+      						}
+      					}
+      					else if (correspondingFactors[d.data.name]) {
+      						if (chart[d.data.name] === false) {
+      							chart[d.data.name] = true;
+      						} else if (chart[d.data.name] === true) {
+      							chart[d.data.name] = false
+      						}
+
+      						if (chart[d.data.name] === true) {
+      							showBarChart(d.parent.data.name, d.data.name)
+      						} else if (chart[d.data.name] === false) {
+      							div.select("d.div.name").remove();
+      						}
+      					}
+          			})
+
+
+              // Populate the <text> elements with our data-driven titles.
+              g.selectAll(".node")
+                  .append("text")
+                  //.attr("transform", function(d, i) {
+                      //console.log(d);
+                      //console.log(d.x0);
+                      //console.log(d.x1);
+                      //console.log(d.y0);
+                      //console.log(d.y1);
+                      //console.log([d.x0 + (d.x1 - d.x0)/2, d.y0 + (d.y1 - d.y0)/2]);
+                      //return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
+                  .attr("dx", function(d) {
+      					if (d.data.name === "AFR") {return 105;}
+      					else if (d.data.name === "WPR") {return -165;}
+      					else if (d.data.name === "EUR") {return 40;}
+      					else if (d.data.name === "SEAR") {return -105;}
+      					else if (d.data.name === "EMR") {return 5;}
+      					else if (d.data.name === "AMR") {return -85;}
+      				}) // radius margin
+                  .attr("dy", function(d) {
+      					if (d.data.name === "EUR") {return 110;}
+      					else if (d.data.name === "SEAR") {return -100;}
+      					else if (d.data.name === "EMR") {return -100;}
+      					else if (d.data.name === "AMR") {return 110;}
+      				}) // rotation align
+                  .text(function(d) { if (correspondingContinent[d.data.name]) {return correspondingContinent[d.data.name];} })
+              ;
+          };
+
+      	//Functions for sunburst.
+      	//
+      	//This function takes the object "d" of hierarcal datas in sunburst for arguments. It allow to format all datas shox in the sunburst when the user
+      	//point a specific element.
+          function infoBubble(d) {
+              if (d.data.name === "origin") {
+                  allDeaths = 0;
+                  for (key in continentsCode) {
+                      allDeaths = allDeaths + totalDeaths[key];
+                  }
+                  return "Total deaths cause by environment :" + allDeaths;
+              } else if (correspondingContinent[d.data.name]) {
+                  return correspondingContinent[d.data.name];
+              } else if (correspondingFactors[d.data.name]) {
+      			var val = 0;
+      			var info = "";
+
+      			if (d.data.name === "Total_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * totalDeathsMax); info = " people death causing by environment (per 100 000 population).";}
+      			else if (d.data.name === "Uv_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * uvMax); info = " people death by uv exposition (per 100 000 population).";}
+      			else if (d.data.name === "Chemical_pollution") { val = (totalDeaths[d.parent.data.name] * chemicalMax).toFixed(3); info = " mortality rate from unintentional poisoning (per 100 000 population)."}
+      			else if (d.data.name === "Water_pollution") { val = (totalDeaths[d.parent.data.name] * waterMax).toFixed(3); info = " mortality rate attributed to exposure to unsafe WASH services (per 100 000 population)";}
+      			else if (d.data.name === "Air_pollution") { val = (totalDeaths[d.parent.data.name] * airMax).toFixed(3); info = " percentage of the population exposed at more of 10mg/m3 during a year.";}
+
+      			return correspondingContinent[d.parent.data.name] + "<br/>" + correspondingFactors[d.data.name] + " :" + val + info;
+      		}
+          }
+
+      	//This function takes the d.x0 and d.x1 values of each arc in the sunburst for argument. It calculate an angle of rotation to plot correctly element's
+      	//names on the sunburst.
+          function computeTextRotation(d) {
+              var angle = (d.x0 + d.x1) / Math.PI * 90;
+              // Avoid upside-down labels
+              return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
+              //return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
+          }
+
+      //<------------------------------------------ BAR-CHART ---------------------------------->
+
+      	function showBarChart(continentSelected, factorSelected) {
+
+      		var fact = {"Total_deaths" : "PourcentDeathAttribuableEnv", "Uv_deaths" : "Per100000UV", "Chemical_pollution" : "Per100000Chemi", "Water_pollution" : "Per100000Water", "Air_pollution" : "Per100000AirPol"};
+      		var factorSel = fact[factorSelected];
+
+      		var maxFactors = {"Total_deaths" : 0, "Uv_deaths" : 0, "Chemical_pollution" : 0, "Water_pollution" : 0, "Air_pollution" : 0};
+
+      		var countries = []
+      		var valuesCountries = []
+
+      		d3.csv(data, function(data) {
+      			data.forEach(function(d) {
+                      //Transform each value in number type.
+                      for (var i = 0; i < factors.length; i++){
+                          var key = factors[i];
+                          d[key] = +d[key];
+                      };
+
+      				//Search all max values for each factors regarding each country.
+                  	if (d["PourcentDeathAttribuableEnv"] >= maxFactors["Total_deaths"]){
+                      	maxFactors["Total_deaths"] = d["PourcentDeathAttribuableEnv"];
+                  	}
+                  	if (d["Per100000UV"] >= maxFactors["Uv_deaths"]){
+                      	maxFactors["Uv_deaths"] = d["Per100000UV"];
+                  	}
+                  	if (d["Per100000Chemi"] >= maxFactors["Chemical_pollution"]){
+                      	maxFactors["Chemical_pollution"] = d["Per100000Chemi"];
+                  	}
+                  	if (d["Per100000Water"] >= maxFactors["Water_pollution"]){
+                      	maxFactors["Water_pollution"] = d["Per100000Water"];
+                  	}
+                  	if (d["Per100000AirPol"] >= maxFactors["Air_pollution"]){
+                      	maxFactors["Air_pollution"] = d["Per100000AirPol"];
+              		}
+      			})
+
+      			//Takes each names and values for each country selected.
+      			data.forEach(function(d){
+      				if (d.region_code === continentSelected) {
+      					countries.push(d.country_name);
+      					valuesCountries.push(d[factorSel]);
+      				}
+      			})
+      			var maxF = maxFactors[factorSelected];
+      			//Calculate the ratio for each values.
+      			for (var i = 0; i < valuesCountries.length; i++) {
+      				valuesCountries[i] = valuesCountries[i] / maxF;
+      			}
+      		})
+
+      		//Make the rest of the code here to draw a bar chart.
+      	}
+
+      //<------------------------------------------ BAR-CHART ---------------------------------->
+
+      function showMatrix(continentSelected) {
+
+      	var datasSelected = {"Total_deaths" : {}, "Uv_deaths" : {}, "Chemical_pollution" : {}, "Water_pollution" : {}, "Air_pollution" : {} };
+      	var maxFactors = {"Total_deaths" : 0, "Uv_deaths" : 0, "Chemical_pollution" : 0, "Water_pollution" : 0, "Air_pollution" : 0};
+
+      	d3.csv(data, function(data) {
+      		data.forEach(function(d) {
+      			//Transform each value in number type.
+      			for (var i = 0; i < factors.length; i++){
+                  	var key = factors[i];
+                      d[key] = +d[key];
+                  };
+      		})
+
+      		//Search all max values for each factors regarding each country.
+      		data.forEach(function(d) {
+      			if (continentSelected === d.region_code) {
+      				//Search all max values for each factors regarding each country.
+                  	if (d["PourcentDeathAttribuableEnv"] >= maxFactors["Total_deaths"]){
+                      	maxFactors["Total_deaths"] = d["PourcentDeathAttribuableEnv"];
+                  	}
+                  	if (d["Per100000UV"] >= maxFactors["Uv_deaths"]){
+                      	maxFactors["Uv_deaths"] = d["Per100000UV"];
+                  	}
+                  	if (d["Per100000Chemi"] >= maxFactors["Chemical_pollution"]){
+                      	maxFactors["Chemical_pollution"] = d["Per100000Chemi"];
+                  	}
+                  	if (d["Per100000Water"] >= maxFactors["Water_pollution"]){
+                      	maxFactors["Water_pollution"] = d["Per100000Water"];
+                  	}
+                  	if (d["Per100000AirPol"] >= maxFactors["Air_pollution"]){
+                      	maxFactors["Air_pollution"] = d["Per100000AirPol"];
+              		}
+      			}
+      		})
+
+      		//Put each country and each ratio value in the right dictionnary factor.
+      		data.forEach(function(d) {
+      			if (continentSelected === d.region_code) {
+      				datasSelected.Total_deaths[d.country_name] = d.PourcentDeathAttribuableEnv / maxFactors["Total_deaths"];
+      				datasSelected.Uv_deaths[d.country_name] = d.Per100000UV / maxFactors["Uv_deaths"];
+      				datasSelected.Chemical_pollution[d.country_name] = d.Per100000Chemi / maxFactors["Chemical_pollution"];
+      				datasSelected.Water_pollution[d.country_name] = d.Per100000Water / maxFactors["Water_pollution"];
+      				datasSelected.Air_pollution[d.country_name] = d.Per100000AirPol / maxFactors["Air_pollution"];
+      			}
+      		})
+      	})
+
+      	//Make the rest of the code here to draw a matrix.
+      }
+
+          </script>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="about-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">OUR TEAM</h2>
+            <p class="text-white-50">
+              We are a group of students in Master 2 of bioinformatics. We plan to propose a visualization of climate data.
+              We decided to present data from the <a href="https://www.who.int/gho/en/" target="_blank">WHO</a>, which records the number of deaths per 100 000 population attributable to the environment.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Investigators menu -->
+        <div class="text-white-50" id="investigators">
+          <div class="row">
+              <div class="col-sm" id="investigator">
+                Rainier-Georges Numa
+              </div>
+              <div class="col-sm" id="investigator">
+                Debornes Lélia
+              </div>
+              <div class="col-sm" id="investigator">
+                Marianne Taupin
+              </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects-section bg-light">
+      <div class="container">
+
+        <!-- Featured Project Row -->
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+          <div class="col-xl-8 col-lg-7">
+            <img class="img-fluid mb-3 mb-lg-0" src="img/logo-lyon1.png" alt="">
+          </div>
+          <div class="col-xl-4 col-lg-5">
+            <div class="featured-text text-center text-lg-left">
+              <h2>OUR PROJET</h2>
+              <p class="text-black-50 mb-0">
+                We want to highlight differences between deaths in different continents. We want to make an interactive visualization to view the WHO data in detail.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project One Row -->
+        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+          <div class="col-lg-6">
+            <img class="img-fluid" src="img/dataviz.jpg" alt="">
+          </div>
+          <div class="col-lg-6">
+            <div class="bg-black text-center h-100 project">
+              <div class="d-flex h-100">
+                <div class="project-text w-100 my-auto text-center text-lg-left">
+                  <h4 class="text-white">OUR GOAL</h4>
+                  <p class="mb-0 text-white-50">We have decided to represent geographic data without ever using maps.
+                    We try to offer new visualizations for this type of data, in an interactive and fun way for the users.</p>
+                  <hr class="d-none d-lg-block mb-0 ml-0">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Two Row -->
+        <div class="row justify-content-center no-gutters">
+          <div class="col-lg-6">
+            <img class="img-fluid" src="img/OMS.jpg" alt="">
+          </div>
+          <div class="col-lg-6 order-lg-first">
+            <div class="bg-black text-center h-100 project">
+              <div class="d-flex h-100">
+                <div class="project-text w-100 my-auto text-center text-lg-right">
+                  <h4 class="text-white">DISCUSSION</h4>
+                  <p class="mb-0 text-white-50">We are aware that the noise of some data can impact our results.
+                    Indeed, in developing countries, the environmental share of deaths can be questionable given a significant "background noise": mortality is much higher on average. 
+                    Nevertheless, we have been able to highlight some surprising results such as the fact that the countries most exposed to the dangers of UV (countries with a higher death rate) are Australia, New Zealand and Norway!</p>
+                  <hr class="d-none d-lg-block mb-0 mr-0">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black small text-center text-white-50">
+      <div class="container">
+        Copyright &copy; SANTA 2019
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/grayscale.min.js"></script>
+
   </body>
+
 </html>
