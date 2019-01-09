@@ -1,3 +1,4 @@
+library(tidyr)
 #Data Directory
 setwd(dir = "../Projet/data_project/")
 
@@ -56,6 +57,35 @@ CountryCode=subset(CodeCorr, select = c("X...Code", "DisplayValue", "WHO_REGION"
 
 Total.Air.Chemicals.Water.UV=merge(Total.Air.Chemicals.Water.UV, CountryCode, by.x = "COUNTRY..code.", by.y = "X...Code", all = TRUE)
 
+
+colnames(Total.Air.Chemicals.Water.UV)=c("country_code", "region_code", "PourcentDeathAttribuableEnv", "Per100000AirPol", "Per100000Chemi", "Per100000Water", "Per100000UV", "country_name", "region_name", "WorldBankincome" )
+
 write.csv(Total.Air.Chemicals.Water.UV, 'data.csv')
 
-colnames(Total.Air.Chemicals.Water.UV)=c("country_code", "region_code", "PourcentDeathAttribuableEnv", "Per100000AirPol", "Per100000Chemi", "Per100000Water", "Per100000UV", "country_name", )
+#new array for matrix
+
+AirPollution<- subset(Total.Air.Chemicals.Water.UV, select = c("Per100000AirPol", "country_name","region_code" ))
+AirPollution=AirPollution %>% drop_na(Per100000AirPol)
+AirPollution$Name<- "AirPollution"
+colnames(AirPollution)<- c("Value", "country_name","continent", "Name")
+
+WaterPollution <- subset(Total.Air.Chemicals.Water.UV, select = c("Per100000Water", "country_name", "region_code" ))
+WaterPollution=WaterPollution %>% drop_na(Per100000Water)
+WaterPollution$Name<- "WaterPollution"
+colnames(WaterPollution)<- c("Value", "country_name","continent", "Name")
+
+ChemiPollution <- subset(Total.Air.Chemicals.Water.UV, select = c("Per100000Chemi", "country_name", "region_code" ))
+ChemiPollution=ChemiPollution %>% drop_na(Per100000Chemi)
+ChemiPollution$Name<- "ChemicalPollution"
+colnames(ChemiPollution)<- c("Value", "country_name","continent", "Name")
+
+UVExposition <- subset(Total.Air.Chemicals.Water.UV, select = c("Per100000UV", "country_name", "region_code" ))
+UVExposition=UVExposition %>% drop_na(Per100000UV)
+UVExposition$Name <- "UVExposition"
+colnames(UVExposition)<- c("Value", "country_name","continent", "Name" )
+
+MatrixArray=rbind(UVExposition,ChemiPollution,WaterPollution,AirPollution)
+MatrixArray=MatrixArray %>% drop_na(country_name)
+write.csv(MatrixArray, 'data_matrix.csv')
+
+
