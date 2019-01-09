@@ -395,11 +395,11 @@
       			var val = 0;
       			var info = "";
 
-      			if (d.data.name === "Total_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * totalDeathsMax); info = " people death causing by environment (per 100 000 population).";}
-      			else if (d.data.name === "Uv_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * uvMax); info = " people death by uv exposition (per 100 000 population).";}
-      			else if (d.data.name === "Chemical_pollution") { val = (totalDeaths[d.parent.data.name] * chemicalMax).toFixed(3); info = " mortality rate from unintentional poisoning (per 100 000 population)."}
-      			else if (d.data.name === "Water_pollution") { val = (totalDeaths[d.parent.data.name] * waterMax).toFixed(3); info = " mortality rate attributed to exposure to unsafe WASH services (per 100 000 population)";}
-      			else if (d.data.name === "Air_pollution") { val = (totalDeaths[d.parent.data.name] * airMax).toFixed(3); info = " percentage of the population exposed at more of 10mg/m3 during a year.";}
+      			if (d.data.name === "Total_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * totalDeathsMax); info = "number of deaths attribuable to the environment (per 100 000 population)";}
+      			else if (d.data.name === "Uv_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * uvMax); info = "UV radiation attributable deaths (per 100 000 population)";}
+      			else if (d.data.name === "Chemical_pollution") { val = (totalDeaths[d.parent.data.name] * chemicalMax).toFixed(3); info = " number of deaths from unintentional poisoning (per 100 000 population)."}
+      			else if (d.data.name === "Water_pollution") { val = (totalDeaths[d.parent.data.name] * waterMax).toFixed(3); info = " number of deaths attributed to exposure to unsafe water, sanitation and hygiene (per 100 000 population)";}
+      			else if (d.data.name === "Air_pollution") { val = (totalDeaths[d.parent.data.name] * airMax).toFixed(3); info = "Ambient and household air pollution attributable death rate (per 100 000 population)";}
 
       			return correspondingContinent[d.parent.data.name] + "<br/>" + correspondingFactors[d.data.name] + " :" + val + info;
       		}
