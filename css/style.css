@@ -13,6 +13,21 @@ div.tooltip {
     pointer-events: none;
 }
 
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
 .masthead {
   background: #fff !important;
 }
@@ -43,4 +58,35 @@ div.menu-haut {
 div.tooltip {
   background: #003249 !important;
   color : #fff !important;
+}
+
+.total_death {
+  background-color: #d65108 !important;
+  color: #d65108 !important;
+}
+
+.UV_deaths {
+  background-color: #648381 !important;
+  color: #648381 !important;
+}
+
+.chem_poll {
+  background-color: #9bc4cb !important;
+  color: #9bc4cb !important;
+}
+
+.water_poll {
+  background-color: #202030 !important;
+  color: #202030 !important;
+}
+
+.air_poll {
+  background-color: #ff6700 !important;
+  color: #ff6700 !important;
+}
+
+#legend {
+  border-style: solid;
+  border-color: #003249;
+  padding: 2%;
 }
