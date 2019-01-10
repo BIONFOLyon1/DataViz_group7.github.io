@@ -626,10 +626,11 @@ function showMatrix(continentSelected) {
 	}
 	
 	function drawMatrix(datasSelected, minValue, maxValue, svg, x, y, countriesSelected, factorsGroup) {
-		
+		var d = 1/14;
 		var colorScale = d3.scaleLog()
-		 	.domain([minValue, maxValue])
-			.range(['#000080','#0f0980','#181180','#201780','#251e80','#2a2480','#2f2980','#332f80','#373580','#3a3981','#3d3e81','#404381','#434881','#464d82','#485382','#4b5882','#4d5c83','#506183','#536684','#556c84','#587085','#5a7586','#5d7a87','#607f88','#638389','#66888a','#698e8c','#6d928d','#71978f','#759b91','#79a093','#7ea596','#83a999','#89ad9c','#90b1a0','#97b5a4','#9fb9a9','#a8bcaf','#b4beb7','#c0c0c0']);
+			.range(['#ffffe0','#ffecbc','#ffd79f','#ffc388','#ffad78','#ff946c','#f87e65','#ef685e','#e45357','#d73e4d','#c72b41','#b51831','#a1061e','#8b0000'])
+ 			.domain([minValue+1*d,minValue+2*d,minValue+3*d,minValue+4*d,minValue+5*d,minValue+6*d,minValue+7*d,minValue+8*d,minValue+9*d,minValue+10*d,minValue+11*d,minValue+12*d,minValue+13*d,minValue+14*d]);
+
 
 		  // create a tooltip
 		  var tooltip = d3.select("my_dataviz")
