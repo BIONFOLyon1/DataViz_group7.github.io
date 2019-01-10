@@ -377,7 +377,7 @@ div.tooltip {
 			else if (d.data.name === "Uv_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * uvMax); info = " people death by uv exposition (per 100 000 population).";}
 			else if (d.data.name === "Chemical_pollution") { val = (totalDeaths[d.parent.data.name] * chemicalMax).toFixed(3); info = " mortality rate from unintentional poisoning (per 100 000 population)."}
 			else if (d.data.name === "Water_pollution") { val = (totalDeaths[d.parent.data.name] * waterMax).toFixed(3); info = " mortality rate attributed to exposure to unsafe WASH services (per 100 000 population)";}
-			else if (d.data.name === "Air_pollution") { val = (totalDeaths[d.parent.data.name] * airMax).toFixed(3); info = " percentage of the population exposed at more of 10mg/m3 during a year.";}
+			else if (d.data.name === "Air_pollution") { val = (totalDeaths[d.parent.data.name] * airMax).toFixed(3); info = " percentage of the population exposed at more of 10mg/m3 during a year (per 100 000 population).";}
 			
 			return "Continent selected :" + correspondingContinent[d.parent.data.name] + "<br/>" + correspondingFactors[d.data.name] + " :" + val + info; 
 		}
@@ -678,7 +678,16 @@ function showMatrix(continentSelected) {
 				div.transition()        
 					.duration(200)      
 					.style("opacity", .9);
-				div.html("Factor explored : "+ d[0] +"<br/>Population explored : "+ d[1]+ "<br/>Value : " + d[2].toFixed(3))
+				div.html( function() {
+						var val = 0;
+						var info = "";
+						if (d[0] === "Total_deaths") {val = d[2] * maxFactors["Total_deaths"]; info = " people death causing by environment (per 100 000 population).";}
+						else if (d[0] === "Uv_deaths") {val = d[2] * maxFactors["Uv_deaths"]; info = " people death by uv exposition (per 100 000 population).";}
+						else if (d[0] === "Chemical_pollution") {val = d[2] * maxFactors["Chemical_pollution"]; info = " mortality rate from unintentional poisoning (per 100 000 population)."}
+						else if (d[0] === "Water_pollution") {val = d[2] * maxFactors["Water_pollution"]; info = " mortality rate attributed to exposure to unsafe WASH services (per 100 000 population)";}
+						else if (d[0] === "Air_pollution") {val = d[2] * maxFactors["Air_pollution"];info = " percentage of the population exposed at more of 10mg/m3 during a year (per 100 000 population).";}
+						return "Factor explored : "+ d[0] +"<br/>Population explored : "+ d[1]+ "<br/>Value : " + val.toFixed(3) + info;
+					})			
 					.style("left", (d3.event.pageX) + "px")		
                 	.style("top", (d3.event.pageY - 28) + "px")
 				})
