@@ -69,33 +69,18 @@
     <header class="masthead">
 
       <div class="container d-flex h-100 align-items-center">
-        <div class="col-" id="legend">
-          <h4>Legend :</h4> 
+
+        <div class="col-md-6" id="legend">
+          <h4>Legend :</h4>
           <div id="container"></div>
-            <script>     
-                var min=2;
-                var max=11;
-                var des=(max-min)/35;
-                var colorScale = d3.scaleLinear()
-                    .range(['#ffffff','#f9f8f6','#f3f0ee','#ece8e5','#e6e2dd','#e0dbd6','#d9d3cd','#d3ccc5','#cdc4bd','#c7bdb5','#c1b6ad','#bbafa5','#b5a99d','#afa195','#a99a8d','#a39486','#9e8d7f','#978677','#91806f','#8c7968','#867361','#806d5a','#7a6753','#74604c','#6e5a45','#69543e','#634e38','#5d4831','#57412a','#513b24','#4d371e','#463118','#412b11','#3b250a','#362000'])
-                    .domain([min+1*des,min+2*des,min+3*des,min+4*des,min+5*des,min+6*des,min+7*des,min+8*des,min+9*des,min+10*des,min+11*des,min+12*des,min+13*des,min+14*des,min+15*des,min+16*des,min+17*des,min+18*des,min+19*des,min+20*des,min+21*des,min+22*des,min+23*des,min+24*des,min+25*des,min+26*des,min+27*des,min+28*des,min+29*des,min+30*des,min+31*des,min+32*des,min+33*des,min+34*des,min+35*des]);
-                
-                var svg = d3.select("div#container")
-                  .append("svg").attr("width", 50).attr("height", 50)
 
-                svg.append("g")
-                  .attr("class", "legendLinear")
-
-                var legendLinear = d3.legendColor()
-                  .shapeWidth(15)
-                  .shapeHeight(15)
-                  .shapePadding(10)
-                  .orient('horizontal')
-                  .scale(colorScale);
-
-                svg.select(".legendLinear")
-                  .call(legendLinear);
-            </script>
+          <span class="center"> Scale of total deaths </span><br>
+          <span class="total_death1">....</span> 2.3<br>
+          <span class="total_death2">....</span> 4.4<br>
+          <span class="total_death3">....</span> 6.6<br>
+          <span class="total_death4">....</span> 8.8<br>
+          <span class="total_death5">....</span> 11.0<br>
+          <br><br>
           <span class="UV_deaths">....</span> Number of deaths due to UV radiation*<br>
           <span class="chem_poll">....</span> Number of deaths due to Chemicals pollution*<br>
           <span class="water_poll">....</span>  Number of deaths due to Water pollution* <br>
@@ -110,7 +95,7 @@
               var height = 500;
               var radius = Math.min(width, height) / 2;
               var color = d3.scaleOrdinal(d3.schemeCategory20b);
-          	
+
             //Control bar chart and matrix displayed on the screen.
           	var matrix = {"EMR": false, "AFR": false, "EUR": false, "AMR": false, "WPR" : false, "SEAR" : false};
           	var chart = {"Uv_deaths": false,"Chemical_pollution": false, "Water_pollution": false, "Air_pollution": false};
@@ -128,8 +113,8 @@
                 ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
                 ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
               }
-              
-               
+
+
               var min=2;
               var max=11;
               var des=(max-min)/35;
@@ -215,7 +200,7 @@
 
               //This function takes only "data", as string, in arguments. It allow to extract values in CSV file and tranform them in number. Then all datas are get-up
               //in the corresponding variable factor. Finally call "ratioFactor" function.
-              
+
 
 
               function parseCSV (data) {
@@ -450,7 +435,7 @@
           			var val = 0;
           			var info = "";
 
-          			
+
           			if (d.data.name === "Uv_deaths") {val= (uvMax).toFixed(3) ; info = " UV radiation attributable deaths (per 100,000 population)";}
           			else if (d.data.name === "Chemical_pollution") { val = (chemicalMax).toFixed(3); info = " number of deaths from unintentional poisoning (per 100,000 population)";}
           			else if (d.data.name === "Water_pollution") { val = (waterMax).toFixed(3); info = " number of deaths attributed to exposure to unsafe water, sanitation and hygiene (per 100,000 population)";}

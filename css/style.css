@@ -85,9 +85,33 @@ div.tooltip {
   color: #ff6700 !important;
 }
 
+.total_death1 {
+  background-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+.total_death2 {
+  background-color: rgb(202, 193, 185); !important;
+  color: rgb(202, 193, 185); !important;
+}
+
+.total_death3 {
+  background-color: rgb(151, 134, 119) !important;
+  color: rgb(151, 134, 119) !important;
+}
+
+.total_death4 {
+  background-color: rgb(102, 81, 59) !important;
+  color: rgb(102, 81, 59) !important;
+}
+
+.total_death5 {
+  background-color: rgb(54, 32, 0) !important;
+  color: rgb(54, 32, 0) !important;
+}
+
 #legend {
   border-style: solid;
   border-color: #003249;
-  padding: 2%;
+  padding : 2%;
 }
-

@@ -23,9 +23,15 @@
 
     <!-- Import d3JS -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- LegendColor d3JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+
 
     <!-- Style above the rest -->
     <link href="css/style.css" rel="stylesheet">
+
+
+
   </head>
 
   <body id="page-top">
@@ -33,7 +39,12 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container menu-haut">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">The impact of environment on human health</a>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">The impact of environment on human health<br>
+          <font size="0"><em>Visualization of WHO (World Health Organisation) data about the number of deaths due to the "environment". <br>
+          This mortality is due to many factors as the number of deaths due to air pollution, pollution to chemicals, access to clean water (water pollution) and UV exposure.
+        </em></font>
+        </a>
+
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fas fa-bars"></i>
@@ -58,13 +69,23 @@
     <header class="masthead">
 
       <div class="container d-flex h-100 align-items-center">
-        <div class="col-" id="legend">
-          <h4>Legend :</h4> <br>
-          <span class="total_death">....</span> Total deaths <br>
-          <span class="UV_deaths">....</span> UV deaths <br>
-          <span class="chem_poll">....</span> Chemical pollution <br>
-          <span class="water_poll">....</span>  Water pollution <br>
-          <span class="air_poll">....</span>  Air pollution <br>
+
+        <div class="col-md-6" id="legend">
+          <h4>Legend :</h4>
+          <div id="container"></div>
+
+          <span class="center"> Scale of total deaths </span><br>
+          <span class="total_death1">....</span> 2.3<br>
+          <span class="total_death2">....</span> 4.4<br>
+          <span class="total_death3">....</span> 6.6<br>
+          <span class="total_death4">....</span> 8.8<br>
+          <span class="total_death5">....</span> 11.0<br>
+          <br><br>
+          <span class="UV_deaths">....</span> Number of deaths due to UV radiation*<br>
+          <span class="chem_poll">....</span> Number of deaths due to Chemicals pollution*<br>
+          <span class="water_poll">....</span>  Number of deaths due to Water pollution* <br>
+          <span class="air_poll">....</span>  Number of deaths due to Air pollution*<br>
+         <font size="0"><em>*the number of deaths is per 100,000 population and for 1 year. <br> (Water, Air and Chemicals pollution 2016, UV 2002 <br>and % of deaths due to environment 2012)</em></font></em></font>
         </div>
           <svg class="align-items-center"></svg>
           <script>
@@ -74,15 +95,35 @@
               var height = 500;
               var radius = Math.min(width, height) / 2;
               var color = d3.scaleOrdinal(d3.schemeCategory20b);
-          	//Control bar chart and matrix displayed on the screen.
-          	var matrix = {"EMR": false, "AFR": false, "EUR": false, "AMR": false, "WPR" : false, "SEAR" : false};
-          	var chart = {"Total_deaths": false, "Uv_deaths": false,"Chemical_pollution": false, "Water_pollution": false, "Air_pollution": false};
 
-              // Define the div for the tooltip
+            //Control bar chart and matrix displayed on the screen.
+          	var matrix = {"EMR": false, "AFR": false, "EUR": false, "AMR": false, "WPR" : false, "SEAR" : false};
+          	var chart = {"Uv_deaths": false,"Chemical_pollution": false, "Water_pollution": false, "Air_pollution": false};
+
+            // Define the div for the tooltip
               var div = d3.select("body").append("div")
                   .attr("class", "tooltip")
                   .style("opacity", 0);
-              var colorSelected = {"origin": "#FFFFFF", "EMR": "#8c7a6b", "AFR": "#8c7a6b", "EUR": "#8c7a6b", "AMR": "#8c7a6b", "WPR": "#8c7a6b", "SEAR": "#8c7a6b", "Total_deaths": "#d65108", "Uv_deaths": "#648381", "Chemical_pollution": "#9bc4cb", "Water_pollution": "#202030", "Air_pollution": "#ff6700"}
+
+
+            function rgb2hex(rgb){
+              rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+            return (rgb && rgb.length === 4) ? "#" +
+                ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+                ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+                ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+              }
+
+
+              var min=2;
+              var max=11;
+              var des=(max-min)/35;
+              var colorScale = d3.scaleLinear()
+                  .range(['#ffffff','#f9f8f6','#f3f0ee','#ece8e5','#e6e2dd','#e0dbd6','#d9d3cd','#d3ccc5','#cdc4bd','#c7bdb5','#c1b6ad','#bbafa5','#b5a99d','#afa195','#a99a8d','#a39486','#9e8d7f','#978677','#91806f','#8c7968','#867361','#806d5a','#7a6753','#74604c','#6e5a45','#69543e','#634e38','#5d4831','#57412a','#513b24','#4d371e','#463118','#412b11','#3b250a','#362000'])
+                    .domain([min+1*des,min+2*des,min+3*des,min+4*des,min+5*des,min+6*des,min+7*des,min+8*des,min+9*des,min+10*des,min+11*des,min+12*des,min+13*des,min+14*des,min+15*des,min+16*des,min+17*des,min+18*des,min+19*des,min+20*des,min+21*des,min+22*des,min+23*des,min+24*des,min+25*des,min+26*des,min+27*des,min+28*des,min+29*des,min+30*des,min+31*des,min+32*des,min+33*des,min+34*des,min+35*des]);
+
+
+              var colorSelected = {"origin": "#FFFFFF", "EMR": "#d1c9c2", "AFR": "#412b11", "EUR": "#c6bcb4 ", "AMR": "#725e4a", "WPR": "#f6f4f2", "SEAR": "#b9ada2", "Total_deaths": "#d65108", "Uv_deaths": "#648381", "Chemical_pollution": "#9bc4cb", "Water_pollution": "#202030", "Air_pollution": "#ff6700"}
 
               //Create primary <g> element in <SVG> with the correctwidth and height.
               var g = d3.select('svg')
@@ -107,9 +148,9 @@
               var air = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
 
               //Variables for keys accession.
-          	factors = ["PourcentDeathAttribuableEnv", "Per100000UV", "Per100000Chemi", "Per100000Water", "Per100000AirPol"];
+          	factors = ["Per100000UV", "Per100000Chemi", "Per100000Water", "Per100000AirPol"];
               var continentsCode = ["EMR", "AFR", "EUR", "AMR", "WPR", "SEAR"];
-          	var correspondingFactors = {"Total_deaths" : "Total deaths", "Uv_deaths" : "UV deaths", "Chemical_pollution" : "Chemical pollution", "Water_pollution" : "Water pollution", "Air_pollution" : "Air pollution"};
+          	var correspondingFactors = {"Uv_deaths" : "UV deaths", "Chemical_pollution" : "Chemical pollution", "Water_pollution" : "Water pollution", "Air_pollution" : "Air pollution"};
               var correspondingContinent = {"EMR" : "Eastern Mediterranean", "AFR" : "Africa", "EUR" : "Europe", "AMR" : "Americas", "WPR" : "Western Pacific", "SEAR" : "South-East Asia"};
 
               //Varibale to get in shape datas extracted for sunburst only (hierarchy model needed for sunburst).
@@ -118,37 +159,37 @@
                       "name": "EMR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "AFR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "EUR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "AMR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "WPR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "SEAR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   }
               ]};
 
@@ -159,6 +200,9 @@
 
               //This function takes only "data", as string, in arguments. It allow to extract values in CSV file and tranform them in number. Then all datas are get-up
               //in the corresponding variable factor. Finally call "ratioFactor" function.
+
+
+
               function parseCSV (data) {
           		var countries = 0;
                   d3.csv(data, function(data) {
@@ -172,7 +216,6 @@
 
                           //Put each value in the correponding variable factor and the corresponding continent.
                           var continentCode = d["region_code"];
-                          totalDeaths[continentCode] = totalDeaths[continentCode] + d["PourcentDeathAttribuableEnv"];
                           uv[continentCode] = uv[continentCode] + d["Per100000UV"];
                           chemical[continentCode] = chemical[continentCode] + d["Per100000Chemi"];
                           water[continentCode] = water[continentCode] + d["Per100000Water"];
@@ -187,14 +230,13 @@
           			}
                       ratioFactors();
                   });
-                  return (totalDeaths, uv, chemical, water, air);
+                  return (uv, chemical, water, air);
               };
 
               //This function take all variables factor in argument. It make the ratio for each factor. For factor, the continent with the bigger value have the
               //maximal ratio (1), for the other, the ratio decrease in function of the ratio value(n)/value(n max). Finally it's call hierarchyNodes function.
               function ratioFactors() {
           		//Global variables needed to call after them in infoBubble function.
-                  totalDeathsMax = 0;
                   uvMax = 0;
                   chemicalMax = 0;
                   waterMax = 0;
@@ -203,9 +245,6 @@
                   //Takes the maximum value for each factor.
                   for (var i = 0; i < continentsCode.length; i++){
                       var key = continentsCode[i];
-                      if (totalDeaths[key] >= totalDeathsMax){
-                          totalDeathsMax = totalDeaths[key];
-                      }
                       if (uv[key] >= uvMax){
                           uvMax = uv[key];
                       }
@@ -223,7 +262,6 @@
                   //Then calculate the ratio.
                   for (var i = 0; i < continentsCode.length; i++){
                       var key = continentsCode[i];
-                      totalDeaths[key] = totalDeaths[key] / totalDeathsMax;
                       uv[key] = uv[key] / uvMax;
                       chemical[key] = chemical[key] /chemicalMax;
                       water[key] = water[key] / waterMax;
@@ -236,7 +274,7 @@
               //variable. Then it calls parseValuesNodes function.
               function hierarachyNodes() {
                   //Allvariables factors are contains in "factors" variable.
-                  var factors = [totalDeaths, uv, chemical, water, air];
+                  var factors = [uv, chemical, water, air];
                   //Each value of each variable factor are put in "nodes.children" in a correct way.
                   nodes.children.forEach(function(continent){
                       var c = continent.name;
@@ -244,7 +282,6 @@
                       continent.children[1]["value"] = factors[1][c];
                       continent.children[2]["value"] = factors[2][c];
                       continent.children[3]["value"] = factors[3][c];
-                      continent.children[4]["value"] = factors[4][c];
                   });
                   parseValuesNodes();
               };
@@ -267,7 +304,7 @@
 
           //<------------------------------------------ SUNBURST ---------------------------------->
 
-          	//Make circles around sunburst each 25% percents (from 0% to 100%).
+            //Make circles around sunburst each 25% percents (from 0% to 100%).
           	var grad = [1 , 0.91875, 0.8375, 0.75375, 0,67]
           	for (var i = 0; i < 5; i++) {
           		var circleOne = g.append("circle")
@@ -275,7 +312,7 @@
               		.attr("cy", 0)
               		.attr("r", radius * grad[i])
               		.attr("stroke", "grey")
-          			.attr("fill", "white")
+          			.style("fill", "white")// à modifier
           			.attr("stroke-dasharray", 5, 10)
           			.attr("opacity", 0.7);
           	}
@@ -398,11 +435,11 @@
           			var val = 0;
           			var info = "";
 
-          			if (d.data.name === "Total_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * totalDeathsMax); info = " pourcentage of deaths attribuable to the environments";}
-          			else if (d.data.name === "Uv_deaths") { val = Math.round(totalDeaths[d.parent.data.name] * uvMax); info = " UV radiation attributable deaths (per 100 000 population)";}
-          			else if (d.data.name === "Chemical_pollution") { val = (totalDeaths[d.parent.data.name] * chemicalMax).toFixed(3); info = " number of deaths from unintentional poisoning (per 100 000 population)";}
-          			else if (d.data.name === "Water_pollution") { val = (totalDeaths[d.parent.data.name] * waterMax).toFixed(3); info = " number of deaths attributed to exposure to unsafe water, sanitation and hygiene (per 100 000 population)";}
-          			else if (d.data.name === "Air_pollution") { val = (totalDeaths[d.parent.data.name] * airMax).toFixed(3); info = " ambient and household air pollution attributable death rate (per 100 000 population)";}
+
+          			if (d.data.name === "Uv_deaths") {val= (uvMax).toFixed(3) ; info = " UV radiation attributable deaths (per 100,000 population)";}
+          			else if (d.data.name === "Chemical_pollution") { val = (chemicalMax).toFixed(3); info = " number of deaths from unintentional poisoning (per 100,000 population)";}
+          			else if (d.data.name === "Water_pollution") { val = (waterMax).toFixed(3); info = " number of deaths attributed to exposure to unsafe water, sanitation and hygiene (per 100,000 population)";}
+          			else if (d.data.name === "Air_pollution") { val = (airMax).toFixed(3); info = " ambient and household air pollution attributable death rate (per 100,000 population)";}
 
           			return "Continent selected :" + correspondingContinent[d.parent.data.name] + "<br/>" + correspondingFactors[d.data.name] + " :" + val + info;
           		}
@@ -717,8 +754,7 @@
           			.attr("x", 0)
           			.attr("y", -23)
           			.attr("text-anchor", "left")
-          			.style("font-size", "22px")
-          			.text("A d3.js heatmap");
+          			.style("font-size", "22px");
 
 
           </script>
