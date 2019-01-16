@@ -143,17 +143,3 @@ div.tooltip {
 .x.axis path {
   display: none;
 }
-
-.container {
-	display: inline-block;
-	width:  : 100%;
-	height: 100%;
-}
-
-.container_1-1 {
-	padding : 2%;
-}
-
-.container_1-2 {
-	padding: 2%;
-}
