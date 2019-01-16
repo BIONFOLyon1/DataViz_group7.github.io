@@ -72,7 +72,7 @@ div.tooltip {
     
     //Environment varibles.
     //CSV file who contains all datas.
-    var data = "datas/data.csv";   
+    var data = "data.csv";   
     
     //This variables must contains all datas for each factor.
     var totalDeaths = {"EMR": 0, "AFR": 0 , "EUR": 0, "AMR": 0 , "WPR" : 0, "SEAR" : 0};
