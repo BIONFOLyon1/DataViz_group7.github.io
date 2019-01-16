@@ -114,6 +114,7 @@ div.tooltip {
   border-style: solid;
   border-color: #003249;
   padding : 2%;
+  display: block;
 }
 
 div.tooltip {
