@@ -164,37 +164,37 @@
                       "name": "EMR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "AFR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "EUR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "AMR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "WPR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   },
                   {
                       "name": "SEAR",
                       "size": 1/continentsCode.length,
                       "value": 1,
-                      "children": [{"name": "Total_deaths", "size": 1, "value" : 0}, {"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
+                      "children": [{"name": "Uv_deaths", "size": 1, "value" : 0}, {"name": "Chemical_pollution", "size": 1, "value" : 0}, {"name": "Water_pollution", "size": 1, "value" : 0}, {"name": "Air_pollution", "size": 1, "value" : 0}]
                   }
               ]};
 
@@ -268,13 +268,21 @@
                   };
 
                   //Then calculate the ratio.
+				  var max = [uvMax, chemicalMax, waterMax, airMax];
+				  var maxF = 0;
+				  
+				  for (var i = 0; i < max.length; i++){ 
+				  	if (maxF < max[i]) {
+						maxF = max[i];
+					}   
+				  }
                   for (var i = 0; i < continentsCode.length; i++){
                       var key = continentsCode[i];
                       totalDeaths[key] = totalDeaths[key] / totalDeathsMax;
-                      uv[key] = uv[key] / uvMax;
-                      chemical[key] = chemical[key] /chemicalMax;
-                      water[key] = water[key] / waterMax;
-                      air[key] = air[key] / airMax;
+                      uv[key] = uv[key] / maxF;
+                      chemical[key] = chemical[key] / maxF;
+                      water[key] = water[key] / maxF;
+                      air[key] = air[key] / maxF;
                   };
                   hierarachyNodes();
               };
@@ -283,7 +291,7 @@
               //variable. Then it calls parseValuesNodes function.
               function hierarachyNodes() {
                   //Allvariables factors are contains in "factors" variable.
-                  var factors = [totalDeaths, uv, chemical, water, air];
+                  var factors = [uv, chemical, water, air];
                   //Each value of each variable factor are put in "nodes.children" in a correct way.
                   nodes.children.forEach(function(continent){
                       var c = continent.name;
@@ -291,14 +299,13 @@
                       continent.children[1]["value"] = factors[1][c];
                       continent.children[2]["value"] = factors[2][c];
                       continent.children[3]["value"] = factors[3][c];
-                      continent.children[4]["value"] = factors[4][c];
                   });
-                  parseValuesNodes();
+                  parseValuesNodes(factors);
               };
 
               //This function takes "nodes" variable (at hierarchy for sunburst). For each value it takes the value calculate in ratioFactors function, beacause when
               //we try to take this values in "nodes" it's retrun "0" or "1". Each are put in a array name valuesNodes. Then it callsdrawSunburst function.
-              function parseValuesNodes () {
+              function parseValuesNodes (factors) {
                   valuesNodes.push(nodes.value);
                   for (var i = 0; i < continentsCode.length; i++){
                        valuesNodes.push(nodes.children[i]["value"]);
