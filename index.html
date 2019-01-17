@@ -649,17 +649,25 @@
                   		}
           			}
           		})
-
+				var maxF = 0;
+				for(var i = 1; i < factorsGroup.length; i++) {
+					var key = factorsGroup[i];
+					console.log(maxFactors[key]);
+					if (maxF< maxFactors[key]) {
+						maxF = maxFactors[key];
+					}
+				}
+			
           		//Put each country and each ratio value in the right dictionnary factor.
           		var countriesSelected = [];
           		data.forEach(function(d) {
           			if (continentSelected === d.region_code) {
           				countriesSelected.push(d.country_name);
           				datasSelected.Total_deaths[d.country_name] = d.PourcentDeathAttribuableEnv / maxFactors["Total_deaths"];
-          				datasSelected.Uv_deaths[d.country_name] = d.Per100000UV / maxFactors["Uv_deaths"];
-          				datasSelected.Chemical_pollution[d.country_name] = d.Per100000Chemi / maxFactors["Chemical_pollution"];
-          				datasSelected.Water_pollution[d.country_name] = d.Per100000Water / maxFactors["Water_pollution"];
-          				datasSelected.Air_pollution[d.country_name] = d.Per100000AirPol / maxFactors["Air_pollution"];
+          				datasSelected.Uv_deaths[d.country_name] = d.Per100000UV / maxF;
+          				datasSelected.Chemical_pollution[d.country_name] = d.Per100000Chemi / maxF;
+          				datasSelected.Water_pollution[d.country_name] = d.Per100000Water / maxF;
+          				datasSelected.Air_pollution[d.country_name] = d.Per100000AirPol / maxF;
           			}
           		})
           		processing(datasSelected, factorsGroup, countriesSelected);
@@ -793,7 +801,6 @@
 
           	}
           }
-
           </script>
         </div>
     </header>
