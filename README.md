@@ -2,7 +2,8 @@
 
 ------
 
-<center>![](/img/WHO.png)</center>
+<center>
+  ![](/img/WHO.png)
 
 ------
 
