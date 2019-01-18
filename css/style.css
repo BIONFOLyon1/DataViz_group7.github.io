@@ -110,12 +110,7 @@ div.tooltip {
   color: rgb(54, 32, 0) !important;
 }
 
-#legend {
-  border-style: solid;
-  border-color: #003249;
-  padding : 2%;
-  display: block;
-}
+
 
 div.tooltip {
     position: absolute;
@@ -144,3 +139,27 @@ div.tooltip {
 .x.axis path {
   display: none;
 }
+
+#legend {
+  border-style: solid;
+  border-color: #003249;
+  padding : 2%;
+  display: block;
+  position : absolute;
+  top : 150px;
+  width: 300px;
+}
+
+#graphic
+{
+  position: relative;
+  top: 100px;
+  margin-bottom: 200px;
+}
+#soleil
+{
+  position: relative;
+  top: 0px;
+  left : 400px;
+}
+

@@ -36,42 +36,39 @@
 
   <body id="page-top">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container menu-haut">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">The impact of environment on human health<br>
-          <font size="0"><em>Visualization of WHO (World Health Organisation) data about the number of deaths due to the "environment". <br>
-          This mortality is due to many factors as the number of deaths due to air pollution, pollution to chemicals, access to clean water (water pollution) and UV exposure.
-        </em></font>
-        </a>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container menu-haut">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">The impact of environment on human health<br>
+        <font size="0"><em>Visualization of WHO (World Health Organisation) data about the number of deaths due to the "environment". <br>
+        This mortality is due to many factors as the number of deaths due to air pollution, pollution to chemicals, access to clean water (water pollution) and UV exposure.
+      </em></font>
+      </a>
 
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#about">About Us</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#projects">Project</a>
-            </li>
-          </ul>
-        </div>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#projects">Project</a>
+          </li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
 
 
 
-<!-- Header -->
-    <header class="masthead">
-
-      <div class="container d-flex h-100 align-items-center">
+      <div id="graphic" class="container d-flex h-100 align-items-center">
 
 
-        <div class="col-" id="legend">
+        <div class="col-xs-3" id="legend">
           <h4>Legend :</h4>
           <span class="center"> Scale of total deaths </span><br>
           <span class="total_death1">....</span> 2.3<br>
@@ -83,17 +80,17 @@
           <span class="UV_deaths">....</span> Number of deaths due to UV radiation*<br>
           <span class="chem_poll">....</span> Number of deaths due to Chemicals pollution*<br>
           <span class="water_poll">....</span>  Number of deaths due to Water pollution* <br>
-          <span class="air_poll">....</span>  Number of deaths due to Air pollution*<br>
-         <font size="0"><em>*the number of deaths is per 100,000 population and for 1 year. <br> (Water, Air and Chemicals pollution 2016, UV 2002 <br>and % of deaths due to environment 2012)</em></font></em></font>
+          <span class="air_poll">....</span>  Number of deaths due to Air pollution*<br><br>
+         <font size="0"><em>*the number of deaths is per 100,000 population and for 1 year. <br>
+           (Water, Air and Chemicals pollution 2016, UV 2002 and % of deaths due to environment 2012)</em></font></em></font>
         </div>
 
-        <br>
+        <div class="col-xs-9" id="soleil">
 
           <svg class="align-items-center"></svg>
 
-          <br>
           <section id="new_analysis" class="mr-auto ml-auto">
-            <div class="col-6 col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <SEAR class="SEAR">
               </SEAR>
               <WPR class="WPR">
@@ -101,7 +98,7 @@
               <AMR class="AMR">
               </AMR>
             </div>
-            <div class="col-6 col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <EMR class="EMR">
               </EMR>
               <AFR class="AFR">
@@ -110,6 +107,115 @@
               </EUR>
             </div>
           </section>
+        </div>
+
+
+    </div>
+
+
+
+<!-- About Section -->
+<section id="about" class="about-section text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2 class="text-white mb-4">OUR TEAM</h2>
+          <p class="text-white-50">
+            We are a group of students in Master 2 of bioinformatics. We plan to propose a visualization of climate data.
+            We decided to present data from the <a href="https://www.who.int/gho/en/" target="_blank">WHO</a>, which records the number of deaths per 100 000 population attributable to the environment.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investigators menu -->
+      <div class="text-white-50" id="investigators">
+        <div class="row">
+            <div class="col-sm" id="investigator">
+              Rainier-Georges Numa
+            </div>
+            <div class="col-sm" id="investigator">
+              Debornes Lélia
+            </div>
+            <div class="col-sm" id="investigator">
+              Marianne Taupin
+            </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="projects-section bg-light">
+    <div class="container">
+
+      <!-- Featured Project Row -->
+      <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+        <div class="col-xl-8 col-lg-7">
+          <img class="img-fluid mb-3 mb-lg-0" src="img/logo-lyon1.png" alt="">
+        </div>
+        <div class="col-xl-4 col-lg-5">
+          <div class="featured-text text-center text-lg-left">
+            <h2>OUR PROJET</h2>
+            <p class="text-black-50 mb-0">
+              We want to highlight differences between deaths in different continents. We want to make an interactive visualization to view the WHO data in detail.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project One Row -->
+      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+        <div class="col-lg-6">
+          <img class="img-fluid" src="img/dataviz.jpg" alt="">
+        </div>
+        <div class="col-lg-6">
+          <div class="bg-black text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-left">
+                <h4 class="text-white">OUR GOAL</h4>
+                <p class="mb-0 text-white-50">We have decided to represent geographic data without ever using maps.
+                  We try to offer new visualizations for this type of data, in an interactive and fun way for the users.</p>
+                <hr class="d-none d-lg-block mb-0 ml-0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Two Row -->
+      <div class="row justify-content-center no-gutters">
+        <div class="col-lg-6">
+          <img class="img-fluid" src="img/OMS.jpg" alt="">
+        </div>
+        <div class="col-lg-6 order-lg-first">
+          <div class="bg-black text-center h-100 project">
+            <div class="d-flex h-100">
+              <div class="project-text w-100 my-auto text-center text-lg-right">
+                <h4 class="text-white">DISCUSSION</h4>
+                <p class="mb-0 text-white-50">We are aware that the noise of some data can impact our results.
+                  Indeed, in developing countries, the environmental share of deaths can be questionable given a significant "background noise": mortality is much higher on average.
+                  Nevertheless, we have been able to highlight some surprising results such as the fact that the countries most exposed to the dangers of UV (countries with a higher death rate) are Australia, New Zealand and Norway!</p>
+                <hr class="d-none d-lg-block mb-0 mr-0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black small text-center text-white-50">
+    <div class="container">
+      These visualizations were inspired by <a href="https://bl.ocks.org/denjn5/e1cdbbe586ac31747b4a304f8f86efa5">a David Richards's tutorial for the sunburst</a>, <a href="https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"> a Máté Huszárik tutoriral for barcharts</a> and <a href="https://www.d3-graph-gallery.com/graph/heatmap_style.html">the Yan Holtz heatmap</a>. <br>
+      Copyright &copy; HEALTHENVIRONMENT 2019
+    </div>
+  </footer>
+
+
+
+
 
           <script defer>
 
@@ -270,11 +376,11 @@
                   //Then calculate the ratio.
 				  var max = [uvMax, chemicalMax, waterMax, airMax];
 				  var maxF = 0;
-				  
-				  for (var i = 0; i < max.length; i++){ 
+
+				  for (var i = 0; i < max.length; i++){
 				  	if (maxF < max[i]) {
 						maxF = max[i];
-					}   
+					}
 				  }
                   for (var i = 0; i < continentsCode.length; i++){
                       var key = continentsCode[i];
@@ -649,25 +755,17 @@
                   		}
           			}
           		})
-				var maxF = 0;
-				for(var i = 1; i < factorsGroup.length; i++) {
-					var key = factorsGroup[i];
-					console.log(maxFactors[key]);
-					if (maxF< maxFactors[key]) {
-						maxF = maxFactors[key];
-					}
-				}
-			
+
           		//Put each country and each ratio value in the right dictionnary factor.
           		var countriesSelected = [];
           		data.forEach(function(d) {
           			if (continentSelected === d.region_code) {
           				countriesSelected.push(d.country_name);
           				datasSelected.Total_deaths[d.country_name] = d.PourcentDeathAttribuableEnv / maxFactors["Total_deaths"];
-          				datasSelected.Uv_deaths[d.country_name] = d.Per100000UV / maxF;
-          				datasSelected.Chemical_pollution[d.country_name] = d.Per100000Chemi / maxF;
-          				datasSelected.Water_pollution[d.country_name] = d.Per100000Water / maxF;
-          				datasSelected.Air_pollution[d.country_name] = d.Per100000AirPol / maxF;
+          				datasSelected.Uv_deaths[d.country_name] = d.Per100000UV / maxFactors["Uv_deaths"];
+          				datasSelected.Chemical_pollution[d.country_name] = d.Per100000Chemi / maxFactors["Chemical_pollution"];
+          				datasSelected.Water_pollution[d.country_name] = d.Per100000Water / maxFactors["Water_pollution"];
+          				datasSelected.Air_pollution[d.country_name] = d.Per100000AirPol / maxFactors["Air_pollution"];
           			}
           		})
           		processing(datasSelected, factorsGroup, countriesSelected);
@@ -801,108 +899,9 @@
 
           	}
           }
+
           </script>
-        </div>
-    </header>
 
-    <!-- About Section -->
-    <section id="about" class="about-section text-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <h2 class="text-white mb-4">OUR TEAM</h2>
-            <p class="text-white-50">
-              We are a group of students in Master 2 of bioinformatics. We plan to propose a visualization of climate data.
-              We decided to present data from the <a href="https://www.who.int/gho/en/" target="_blank">WHO</a>, which records the number of deaths per 100 000 population attributable to the environment.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Investigators menu -->
-        <div class="text-white-50" id="investigators">
-          <div class="row">
-              <div class="col-sm" id="investigator">
-                Rainier-Georges Numa
-              </div>
-              <div class="col-sm" id="investigator">
-                Debornes Lélia
-              </div>
-              <div class="col-sm" id="investigator">
-                Marianne Taupin
-              </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects-section bg-light">
-      <div class="container">
-
-        <!-- Featured Project Row -->
-        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
-          <div class="col-xl-8 col-lg-7">
-            <img class="img-fluid mb-3 mb-lg-0" src="img/logo-lyon1.png" alt="">
-          </div>
-          <div class="col-xl-4 col-lg-5">
-            <div class="featured-text text-center text-lg-left">
-              <h2>OUR PROJET</h2>
-              <p class="text-black-50 mb-0">
-                We want to highlight differences between deaths in different continents. We want to make an interactive visualization to view the WHO data in detail.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project One Row -->
-        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-          <div class="col-lg-6">
-            <img class="img-fluid" src="img/dataviz.jpg" alt="">
-          </div>
-          <div class="col-lg-6">
-            <div class="bg-black text-center h-100 project">
-              <div class="d-flex h-100">
-                <div class="project-text w-100 my-auto text-center text-lg-left">
-                  <h4 class="text-white">OUR GOAL</h4>
-                  <p class="mb-0 text-white-50">We have decided to represent geographic data without ever using maps.
-                    We try to offer new visualizations for this type of data, in an interactive and fun way for the users.</p>
-                  <hr class="d-none d-lg-block mb-0 ml-0">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project Two Row -->
-        <div class="row justify-content-center no-gutters">
-          <div class="col-lg-6">
-            <img class="img-fluid" src="img/OMS.jpg" alt="">
-          </div>
-          <div class="col-lg-6 order-lg-first">
-            <div class="bg-black text-center h-100 project">
-              <div class="d-flex h-100">
-                <div class="project-text w-100 my-auto text-center text-lg-right">
-                  <h4 class="text-white">DISCUSSION</h4>
-                  <p class="mb-0 text-white-50">We are aware that the noise of some data can impact our results.
-                    Indeed, in developing countries, the environmental share of deaths can be questionable given a significant "background noise": mortality is much higher on average.
-                    Nevertheless, we have been able to highlight some surprising results such as the fact that the countries most exposed to the dangers of UV (countries with a higher death rate) are Australia, New Zealand and Norway!</p>
-                  <hr class="d-none d-lg-block mb-0 mr-0">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black small text-center text-white-50">
-      <div class="container">
-        These visualizations were inspired by <a href="https://bl.ocks.org/denjn5/e1cdbbe586ac31747b4a304f8f86efa5">a David Richards's tutorial for the sunburst</a>, <a href="https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"> a Máté Huszárik tutoriral for barcharts</a> and <a href="https://www.d3-graph-gallery.com/graph/heatmap_style.html">the Yan Holtz heatmap</a>. <br>
-        Copyright &copy; HEALTHENVIRONMENT 2019
-      </div>
-    </footer>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
