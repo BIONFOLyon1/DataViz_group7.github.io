@@ -1,9 +1,7 @@
 <center><h1>The impact of environment on human health </h1></center>
 
 ------
-
-<center>
-  ![](/img/WHO.png)
+![](/img/WHO.png)
 
 ------
 
