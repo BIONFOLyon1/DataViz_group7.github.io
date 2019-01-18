@@ -7,7 +7,7 @@
 
 
 
-**The aim of this project is to make the wider public aware of the consequences of global warming on human health**
+**The aim of this project is to make the wider public aware of the consequences of global warming on human health.**
 
 Visualization of WHO (World Health Organisation) data about the number of deaths due to the "environment". The modifiable "environment" includes many factors as: 
 
