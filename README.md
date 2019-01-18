@@ -2,13 +2,13 @@
 
 ------
 
-![](/Users/leliadebornes/Desktop/M2BIOINFO/DataViz/project/DataViz_group7.github.io/img/WHO.png)
+![](/img/WHO.png)
 
 ------
 
 
 
-**The aim of this project is to make the wider public aware of the consequences of global warming on human health.**
+**The aim of this project is to make the wider public aware of the consequences of global warming on human health**
 
 Visualization of WHO (World Health Organisation) data about the number of deaths due to the "environment". The modifiable "environment" includes many factors as: 
 
@@ -19,7 +19,7 @@ Visualization of WHO (World Health Organisation) data about the number of deaths
 
 
 
-**Le but de ce projet est de sensibiliser le grand public aux conséquences du réchauffement climatique sur la santé humaine. **
+**Le but de ce projet est de sensibiliser le grand public aux conséquences du réchauffement climatique sur la santé humaine.**
 
 Cette visualisation est basée sur des données de l'OMS (Organisation mondiale de la santé) concernant le nombre de morts dus à "l'environnement". L’environnement modifiable comprend de nombreux facteurs tels que:
 
